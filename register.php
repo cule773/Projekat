@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (empty($_POST["name"])) {
 		$nameErr = "Please enter your name";
 	}else{
-		if (ctype_alumn($name)){
+		if (!preg_match("/^[a-zA-Z ]*$/", $name)){
 			$nameErr = "Only letters and white space allowed";
 			$name = "";
 		}else{
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					if (empty($_POST["ic"])){
 						$icErr = "Please enter your IC number";
 					}else{
-						if(ctype_digit($ic)){
+						if(!preg_match("/^[0-9 -]*$/", $ic)){
 							$icErr = "Please enter a valid IC number";
 							$ic = "";
 						}else{
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 									if (empty($_POST["contact"])){
 										$contactErr = "Please enter your phone number";
 									}else{
-										if(ctype_digit($contact)){
+										if(!preg_match("/^[0-9 -]*$/", $contact)){
 											$contactErr = "Please enter a valid phone number";
 											$contact = "";
 										}else{
