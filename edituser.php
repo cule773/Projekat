@@ -4,6 +4,13 @@ $nameErr = $emailErr = $genderErr = $addressErr = $icErr = $contactErr = $userna
 $name = $email = $gender = $address = $ic = $contact = $uname = $upassword = "";
 $cID;
 
+$oUserName;
+$oPassword;
+$oName;
+$oIC;
+$oEmail;
+$oPhone;
+$oAddress;
 
 $servername = "localhost";
 $username = "root";
@@ -22,7 +29,15 @@ $sql = "SELECT users.UserName, users.Password, customer.CustomerName, customer.C
 	FROM users, customer
 	WHERE users.UserID = customer.UserID AND users.UserID = ".$_SESSION['id']."";
 $result = $conn->query($sql);
-
+while($row = $result->fetch_assoc()){
+	$oUserName = $row['UserName'];
+	$oPassword = $row['Password'];
+	$oName = $row['CustomerName'];
+	$oIC = $row['CustomerIC'];
+	$oEmail = $row['CustomerEmail'];
+	$oPhone = $row['CustomerPhone'];
+	$oAddress = $row['CustomerAddress'];
+}
 class Conection{
 	public $name;
 	public $uname;
@@ -47,33 +62,34 @@ class Conection{
 	public function Ispis(){
 		echo "This is your info " . $this->name. " " . $this->uname. " " . $this->address. " ";
 	}
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (empty($_POST["name"])) {
-*	}else{
-		if (ctype_alumn ($name)){
+		$nameErr = "Please enter your name";
+	}else{
+		if (!preg_match("/^[a-zA-Z ]*$/", $name)){
 			$nameErr = "Only letters and white space allowed";
 			$name = "";
 		}else{
 			$name = $_POST['name'];
 
-			if (ctype_alumn($_POST["uname"])) {
+			if (empty($_POST["uname"])) {
 				$usernameErr = "Please enter your Username";
 				$uname = "";
 			}else{
 				$uname = $_POST['uname'];
 
-				if (ctype_alumn($_POST["upassword"])) {
+				if (empty($_POST["upassword"])) {
 					$passwordErr = "Please enter your Password";
 					$upassword = "";
 				}else{
 					$upassword = $_POST['upassword'];
 
-					if (ctype_digit($_POST["ic"])){
+					if (empty($_POST["ic"])){
 						$icErr = "Please enter your IC number";
 					}else{
-						if(ctype_digit($ic)){
+						if(!preg_match("/^[0-9 -]*$/", $ic)){
 							$icErr = "Please enter a valid IC number";
 							$ic = "";
 						}else{
@@ -91,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 									if (empty($_POST["contact"])){
 										$contactErr = "Please enter your phone number";
 									}else{
-										if(ctype_digit($contact)){
+										if(!preg_match("/^[0-9 -]*$/", $contact)){
 											$contactErr = "Please enter a valid phone number";
 											$contact = "";
 										}else{
@@ -164,22 +180,22 @@ function test_input($data){
 <div class="container">
 <form method="post"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 	<h1>Edit Profile:</h1>
-	Full Name:<br><input type="text" name="name" placeholder="<?php echo $name; ?>">
+	Full Name:<br><input type="text" name="name" placeholder="<?php echo $oName; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $nameErr;?></span><br><br>
 
-	User Name:<br><input type="text" name="uname" placeholder="<?php echo $uname; ?>">
+	User Name:<br><input type="text" name="uname" placeholder="<?php echo $oUserName; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $usernameErr;?></span><br><br>
 
-	New Password:<br><input type="password" name="upassword" placeholder="<?php echo $upassword; ?>">
+	New Password:<br><input type="password" name="upassword" placeholder="<?php echo $oPassword; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $passwordErr;?></span><br><br>
 
-	IC Number:<br><input type="text" name="ic" placeholder="<?php echo $ic; ?>">
+	IC Number:<br><input type="text" name="ic" placeholder="<?php echo $oIC; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $icErr;?></span><br><br>
 
-	E-mail:<br><input type="text" name="email" placeholder="<?php echo $email; ?>">
+	E-mail:<br><input type="text" name="email" placeholder="<?php echo $oEmail; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $emailErr;?></span><br><br>
 
-	Mobile Number:<br><input type="text" name="contact" placeholder="<?php echo $contact; ?>">
+	Mobile Number:<br><input type="text" name="contact" placeholder="<?php echo $oPhone; ?>">
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $contactErr;?></span><br><br>
 
 	<label>Gender:</label><br>
@@ -188,7 +204,7 @@ function test_input($data){
 	<span class="error" style="color: red; font-size: 0.8em;"><?php echo $genderErr;?></span><br><br>
 
 	<label>Address:</label><br>
-    <textarea name="address" cols="50" rows="5" placeholder="<?php echo $address; ?>"></textarea>
+    <textarea name="address" cols="50" rows="5" placeholder="<?php echo $oAddress; ?>"></textarea>
     <span class="error" style="color: red; font-size: 0.8em;"><?php echo $addressErr;?></span><br><br>
 	
 	<input class="button" type="submit" name="submitButton" value="Edit">
