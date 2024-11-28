@@ -16,7 +16,6 @@
     <br><br>
     <input class="button" type="submit" value="Login"/>
     <input class="button" type="button" name="cancel" value="Cancel" onClick="window.location='index.php';" />
-    <p>
 </form>
 </div>
 <blockquote>
@@ -31,4 +30,3 @@ if(isset($_GET['errcode'])){
 
 ?>
 </body>
-</html>
