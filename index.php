@@ -31,10 +31,15 @@ session_start();
 		$sql = "INSERT INTO cart(BookID, Quantity, Price, TotalPrice) VALUES('".$bookID."', ".$quantity.", ".$price.", Price * Quantity)";
 		$conn->query($sql);
 
-		$sql = "UPDATE book SET Price='1500' WHERE BookID LIKE ('B-004')";
+		$sql = "UPDATE book SET Price='150' WHERE BookID LIKE ('B-004')";
 	    $conn->query($sql);
 
-        
+        $sql1 = "INSERT INTO book ('BookID', 'BookTitle', 'ISBN', 'Price', 'Author', 'Type', 'Image') VALUES('B-005', 'Mali princ', '123-456-789-5', 700, 'Pelekanos Books', 'Kids', 'images/maliprinc.jpg')";
+        $conn->query($sql1);
+		
+        $sql2 = "DELETE FROM book WHERE BookID LIKE ('B-005')";
+		$conn->query($sql2);
+		
 	}
 
 
@@ -133,3 +138,4 @@ echo '<blockquote>';
 ?>
 </body>
 </html>
+
