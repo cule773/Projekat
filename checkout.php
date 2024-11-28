@@ -26,11 +26,11 @@ if(isset($_SESSION['id'])){
 	$sql = "SELECT CustomerID from customer WHERE UserID = ".$_SESSION['id']."";
 	$result = $conn->query($sql);
 	while($row = $result->fetch_assoc()){
-		$id = $row['CustomerID'];
+		$cID = $row['CustomerID'];
 	}
-	try{
+                    try{
     $pdo->begin_transaction();
-	$sql = "UPDATE cart SET CustomerID = ".$id." WHERE 1";
+	$sql = "UPDATE cart SET CustomerID = ".$cID." WHERE 1";
 	$conn->query($sql);
 	$pdo->commit();
 	}
@@ -38,6 +38,9 @@ if(isset($_SESSION['id'])){
      $pdo->rollBack();
 	 echo $e->getMessage;
 	}
+
+	$sql = "UPDATE cart SET CustomerID = ".$cID." WHERE 1";
+	$conn->query($sql);
 
 	$sql = "SELECT * FROM cart";
 	$result = $conn->query($sql);
@@ -52,7 +55,7 @@ if(isset($_SESSION['id'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$id."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = $conn->query($sql);
 	echo '<div class="container">';
 	echo '<blockquote>';
@@ -75,7 +78,7 @@ if(isset($_SESSION['id'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$id."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = $conn->query($sql);
 	$total = 0;
 	while($row = $result->fetch_assoc()){
@@ -86,17 +89,17 @@ if(isset($_SESSION['id'])){
     	echo "</td></tr>";
     	$total += $row['TotalPrice'];
 	}
-	echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;''>Total Price: <b>".$total. "din</b></td></tr>";
+	echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;''>Total Price: <b>RM".$total."</b></td></tr>";
 	echo "</table>";
 	echo "</div>";
 
-	$sql = "UPDATE `order` SET Status = 'y' WHERE CustomerID = ".$id."";
+	$sql = "UPDATE `order` SET Status = 'y' WHERE CustomerID = ".$cID."";
 	$conn->query($sql);
 }
 
 $nameErr = $emailErr = $genderErr = $addressErr = $icErr = $contactErr = "";
 $name = $email = $gender = $address = $ic = $contact = "";
-$id;
+$cID;
 
 if(isset($_POST['submitButton'])){
 	if (empty($_POST["name"])) {
@@ -162,10 +165,10 @@ if(isset($_POST['submitButton'])){
 											$sql = "SELECT CustomerID from customer WHERE CustomerName = '".$name."' AND CustomerIC = '".$ic."'";
 											$result = $conn->query($sql);
 											while($row = $result->fetch_assoc()){
-												$id = $row['CustomerID'];
+												$cID = $row['CustomerID'];
 											}
 
-											$sql = "UPDATE cart SET CustomerID = "$id" WHERE 1";
+											$sql = "UPDATE cart SET CustomerID = ".$cID." WHERE 1";
 											$conn->query($sql);
 
 											$sql = "SELECT * FROM cart";
@@ -188,6 +191,12 @@ if(isset($_POST['submitButton'])){
 			}
 		}
 	}
+}
+function test_input($data){
+	$data = trim($data);
+	$data = stripcslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
 }
 ?>
 <style> 
@@ -349,7 +358,7 @@ if(isset($_POST['submitButton'])){
     	echo "</td></tr>";
     	$total += $row['TotalPrice'];
 	}
-	echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;'>Total Price: <b>DIN".$total."</b></td></tr>";
+	echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;'>Total Price: <b>RM".$total."</b></td></tr>";
 	echo "</table>";
 
 	$sql = "UPDATE `order` SET Status = 'y' WHERE CustomerID = ".$cID."";
