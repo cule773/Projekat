@@ -10,14 +10,13 @@ CREATE TABLE `Book`(
     `Type` varchar(128),
     `Image` varchar(128),
     PRIMARY KEY (`BookID`))
-);
+
 
 CREATE TABLE `Users`(
     `UserID` int not null AUTO_INCREMENT,
     `UserName` varchar(128),
     `Password` varchar(16),
-    PRIMARY KEY (UserID))
-);
+    PRIMARY KEY (UserID));
 
 CREATE TABLE `Customer` (
 	`CustomerID` int not null AUTO_INCREMENT,
@@ -29,8 +28,7 @@ CREATE TABLE `Customer` (
     `CustomerGender` varchar(10),
     `UserID` int,
     PRIMARY KEY (`CustomerID`),
-    CONSTRAINT FOREIGN KEY (`UserID`) REFERENCES Users(`UserID`) ON DELETE SET NULL ON UPDATE CASCADE)
-);
+    CONSTRAINT FOREIGN KEY (`UserID`) REFERENCES Users(`UserID`) ON DELETE SET NULL ON UPDATE CASCADE);
 
 CREATE TABLE `Order`(
 	`OrderID` int not null AUTO_INCREMENT,
@@ -42,8 +40,7 @@ CREATE TABLE `Order`(
     `Status` varchar(1),
     PRIMARY KEY (`OrderID`),
     CONSTRAINT FOREIGN KEY (`BookID`) REFERENCES Book(`BookID`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY (`CustomerID`) REFERENCES Customer(`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE)
-);
+    CONSTRAINT FOREIGN KEY (`CustomerID`) REFERENCES Customer(`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE);
 
 CREATE TABLE `Cart`(
 	`CartID` int not null AUTO_INCREMENT,
@@ -54,8 +51,7 @@ CREATE TABLE `Cart`(
     `TotalPrice` double(12,2),
     PRIMARY KEY (`CartID`),
     CONSTRAINT FOREIGN KEY (`BookID`) REFERENCES Book(`BookID`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY (`CustomerID`) REFERENCES Customer(`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE)
-);
+    CONSTRAINT FOREIGN KEY (`CustomerID`) REFERENCES Customer(`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE);
 
 
 INSERT INTO `book`(`BookID`, `BookTitle`, `ISBN`, `Price`, `Author`, `Type`, `Image`) VALUES ('B-001','Lonely Planet Australia (Travel Guide)','123-456-789-1',1200,'Lonely Planet','Travel','image/travel.jpg');
